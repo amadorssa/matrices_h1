@@ -51,25 +51,28 @@ void Matrix::printMatrix() const { // Método para imprimir una matriz
 Matrix& Matrix::operator=(const Matrix& A) { // Operador de asignación
     if (this != &A) { // Evitar autoasignación
         
-        for (unsigned int i = 0; i < numRows; ++i) { // Liberar la memoria
-            delete[] matriz[i];
-        }
-        delete[] matriz;
-
-        // Copiar las dimensiones de la matriz
-        numRows = A.numRows;
-        numColumns = A.numColumns;
-
-        // Asignar nueva memoria
-        matriz = new int*[numRows];
-        for (unsigned int i = 0; i < numRows; ++i) {
-            matriz[i] = new int[numColumns];
-            for (unsigned int j = 0; j < numColumns; ++j) {
-                matriz[i][j] = A.matriz[i][j];
+        try {
+            for (unsigned int i = 0; i < numRows; ++i) { // Liberar la memoria
+                delete[] matriz[i];
             }
+            delete[] matriz;
+
+            // Copiar las dimensiones de la matriz
+            numRows = A.numRows;
+            numColumns = A.numColumns;
+
+            // Asignar nueva memoria
+            matriz = new int*[numRows];
+            for (unsigned int i = 0; i < numRows; ++i) {
+                matriz[i] = new int[numColumns];
+                for (unsigned int j = 0; j < numColumns; ++j) {
+                    matriz[i][j] = A.matriz[i][j];
+                }
+            }    
+        } catch(const std::bad_alloc&) {
+            throw std::string("No es posible asignar la matriz");
         }
     }
-
     return *this;
 }
 
