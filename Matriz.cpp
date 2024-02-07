@@ -189,3 +189,83 @@ Matrix operator*(int scalar, const Matrix& mat) { // Operador de multiplicación
 }
 
 
+Matrix Matrix::inverse() const { // Método para obtener la inversa
+    if (numRows != numColumns) {
+        throw std::string("La matriz no es cuadrada");
+    }
+
+    double det = 0;
+    Matrix adj(numRows, numColumns);
+    for (unsigned int i = 0; i < numRows; ++i) {
+        for (unsigned int j = 0; j < numColumns; ++j) {
+            
+            int sign = ((i + j) % 2 == 0) ? 1 : -1; // Signo del cofactor
+
+            
+            Matrix subMatrix(numRows - 1, numColumns - 1);
+            for (unsigned int k = 0, row = 0; k < numRows; ++k) { 
+                if (k != i) {
+                    for (unsigned int l = 0, col = 0; l < numColumns; ++l) {
+                        if (l != j) {
+                            subMatrix.matriz[row][col] = matriz[k][l];
+                            ++col;
+                        }
+                    }
+                    ++row;
+                }
+            }
+            double subDet = subMatrix.determinant();
+
+            adj.matriz[j][i] = sign * subDet; // Calcular el cofactor
+
+            // Acumular el determinante
+            if (i == 0) {
+                det += matriz[0][j] * adj.matriz[j][i];
+            }
+        }
+    }
+
+    if (det == 0) {
+        throw std::string("La matriz no tiene inversa");
+    }
+
+    // Calcular la matriz inversa
+    adj = adj.transpose();
+    adj = adj * (1 / det);
+    return adj;
+}
+
+/***************************************************************************/
+
+double Matrix::determinant() const { // Método para obtener el determinante
+    if (numRows != numColumns) {
+        throw std::string("La matriz no es cuadrada");
+    }
+
+    if (numRows == 1) {
+        return matriz[0][0];
+    }
+
+    if (numRows == 2) {
+        return matriz[0][0] * matriz[1][1] - matriz[0][1] * matriz[1][0];
+    }
+
+    double det = 0;
+    for (unsigned int i = 0; i < numRows; ++i) {
+        Matrix subMatrix(numRows - 1, numColumns - 1);
+        for (unsigned int j = 1; j < numRows; ++j) {
+            for (unsigned int k = 0; k < numColumns; ++k) {
+                if (k < i) {
+                    subMatrix.matriz[j - 1][k] = matriz[j][k];
+                } else if (k > i) {
+                    subMatrix.matriz[j - 1][k - 1] = matriz[j][k];
+                }
+            }
+        }
+        det += matriz[0][i] * (i % 2 == 0 ? 1 : -1) * subMatrix.determinant();
+    }
+    return det;
+}
+
+
+

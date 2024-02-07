@@ -1,8 +1,8 @@
 /**
  * \file Matriz.hpp
  * \brief Implementaci&oacute;n de una matriz con memoria dinamica.
- * \author Amado Rosas Archiveque & Orlando
- * \date 2013-02-06
+ * \author Amado Rosas Archiveque & Orlando Lopez Roque
+ * \date 2024-02-06
 */
 
 #ifndef MATRIZ_HPP_INCLUDED
@@ -123,6 +123,11 @@ public:
     */
     void resize(unsigned int rows, unsigned int columns); // Redimensionar la matriz
 
+    /**
+     * \brief Obtener la inversa de la matriz.
+     * \return Matriz inversa.
+    */
+    Matrix inverse() const; // Método para obtener la inversa de la matriz
 private:
     
     /**
@@ -139,6 +144,13 @@ private:
      * \brief Puntero a la matriz.
     */
     int** matriz;
+
+    /**
+     * \brief Obtener el determinante de la matriz.
+     * \return Determinante de la matriz.
+    */
+    double determinant() const; // Método para obtener el determinante de la matriz
+
 };
 
 #endif // MATRIZ_HPP
